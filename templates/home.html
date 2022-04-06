@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+<body>
+    <div class="topnav">
+      <a class="active" href="home">Home</a>
+    <a href="mypost">My_Articles</a>
+    <a href="write">Publish_Article</a><br>
+    <a href="logpage">Log In</a>
+    <a href="sign">Sign</a>
+    <a href="logout">Logout</a>
+
+      </div><br><br>
+
+      <center><form action="search" method="post">
+        {% csrf_token %}
+      <input type="text" name="ccc" placeholder="physics grade10 algebra">
+      <input type="submit" value="Submit">
+    </form></center><br>
+
+      <center><h1>{{mess}}</h1></center>
+
+      <div class="row">
+        {% for article in articles %}
+        <div class="card col-lg-6 offset-lg-3 mb-3">
+          <div class="card-body">
+              <h3 class="card-title my-3">Title:{{ article.title }} </h3>
+              <h3 class="card-title my-3">Author:{{ article.write }} </h3>
+              <h3 class="card-title my-3">Email:{{ article.email }} </h3>
+
+            <div class="text-muted mb-3">
+              <div>
+                <span>created: {{ article.created_on|date:"N j Y" }} |</span>
+                <span>updated: {{ article.updated_on|timesince }} ago |</span>
+              </div>
+              <div>
+              </div>
+            </div>
+            <p class="card-text">{{ article.content|linebreaks }}</p>
+            <a class='btn btn-primary' href="{% url 'comments' article.id %}">Comment ...</a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+</body>
+</html>
+

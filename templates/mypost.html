@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  {%load static%}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+<body>
+  <div class="topnav">
+    <a class="active" href="home">Home</a>
+    <a href="mypost">My_Articles</a>
+    <a href="write">Publish_Article</a><br>
+    <a href="logpage">Log In</a>
+    <a href="sign">Sign</a>
+    <a href="logout">Logout</a>
+
+
+  </div><br><br>
+
+  <center><form action="search" method="post">
+    {% csrf_token %}
+  <input type="text" name="ccc" placeholder="physics grade10 algebra">
+  <input type="submit" value="Submit">
+</form></center><br>
+
+  <div class="container-fluid my-5">
+    <div class="row">
+      <div class="col-lg-6 offset-lg-3">
+  
+        <div class="card">
+          <h3 class="card-title text-center my-3">Title:{{ post.title }}</h3>
+        <center> <h3>Author:{{ post.write }}</h3></center>
+        <center> <h3>Email:{{ post.email }}</h3></center>
+          <div class="text-muted text-center mb-3">
+            <div>
+              created: {{ post.created_on|date:"N j Y" }},
+              last updated: {{ post.updated_on|timesince }},
+              by
+              </a>
+            </div>
+            <div>
+            
+            </div>
+          </div>
+          {% if post.image %}
+          <img class="card-img-top" src="{{ post.image.url }}" alt="{{ post.title }}">
+          {% endif %}
+        
+          <div class="card-text mt-5 p-4">
+            {{ post.content|linebreaks }}
+          </div>
+        </div>
+  
+      </div>
+    </div>
+   <div class="row mt-5">
+    <div class="col-lg-6 offset-lg-3">
+  
+      <h3 class="color">Comment</h3>
+      <form name="myForm" action="comment" method='POST'>
+        {% csrf_token %}
+ 
+        <div class="form-group">
+          <textarea class="form-control"  id="id_content" 
+            name="content" rows="15"></textarea>
+        </div>
+        <button class="btn btn-primary ml-2"  type="submit">Comment</button>
+      </form>
+    </div>
+  </div>
+    {% if comments %}
+    <div class="row mt-5">
+      <div class="col-lg-6 offset-lg-3">
+        Comment {{ comments.count }}
+        <span class="badge badge-dark ml-2">{{ comments.count|linebreaks}}</span>
+      </div>
+      {% for comment in comments %}
+      <div class="col-lg-6 offset-lg-3 mt-2">
+        <div class="card p-2">
+          <div class="row">
+            <div class="col-12">
+            </div>
+            <div class="col-12">
+              <p class="m-1 mt-3">{{ comment.content|linebreaks }}</p>
+              <p class="text-right text-muted"><small>{{ comment.created }}</small></p>
+              <p class="text-right text-muted"><small>Commenter:{{ comment.write }}</small></p>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  
+</body>
+</html>
